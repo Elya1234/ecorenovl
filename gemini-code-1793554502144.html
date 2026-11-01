@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉcoRénov' France - Solaire, Pompe à Chaleur & Aides 2026</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-base: #022c22;
+            --bg-glass: rgba(6, 78, 59, 0.35);
+            --border-glass: rgba(52, 211, 153, 0.3);
+            --text-main: #f0fdf4;
+            --text-muted: #a7f3d0;
+            --accent-green: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.35);
+        }
+        body { 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #022c22 100%);
+            color: var(--text-main); 
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .glass-card { 
+            background: var(--bg-glass); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass); 
+            border-radius: 1.75rem; 
+            padding: 2.5rem; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-nav { 
+            background: rgba(2, 44, 34, 0.95); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass); 
+            position: sticky; 
+            top: 0; 
+            z-index: 50; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem 1rem; 
+        }
+        .btn-conversion { 
+            background: linear-gradient(135deg, #34d399, #059669); 
+            color: #022c22; 
+            font-weight: 800; 
+            padding: 1rem 2rem; 
+            border-radius: 1rem; 
+            text-decoration: none; 
+            display: inline-block; 
+            box-shadow: 0 10px 30px rgba(52, 211, 153, 0.4);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.05rem;
+            width: 100%;
+        }
+        .btn-conversion:hover { 
+            transform: scale(1.03); 
+            box-shadow: 0 15px 35px rgba(52, 211, 153, 0.6); 
+            background: linear-gradient(135deg, #6ee7b7, #10b981);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #a7f3d0, #34d399, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-sphere {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(150px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* Layout Hero Section (Formulaire en haut) */
+        .hero-layout {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+            padding-top: 3rem;
+        }
+        .hero-text {
+            flex: 1;
+            padding-top: 2rem;
+        }
+        .hero-form {
+            flex: 1;
+            width: 100%;
+            background: rgba(2, 44, 34, 0.85);
+            border: 1px solid var(--border-glass);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            background: rgba(6, 78, 59, 0.5);
+            border: 1px solid var(--border-glass);
+            color: #6ee7b7;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .section-space {
+            padding: 5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        ul.benefits {
+            list-style: none;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        ul.benefits li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        ul.benefits li::before {
+            content: "✅";
+            font-size: 1.2rem;
+        }
+        iframe { 
+            width: 100%; 
+            height: 650px; 
+            border: none; 
+            border-radius: 1rem; 
+            background: #ffffff; 
+        }
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            .hero-layout {
+                flex-direction: column;
+                padding-top: 1rem;
+                gap: 2rem;
+            }
+            .hero-text {
+                text-align: center;
+                padding-top: 1rem;
+            }
+            ul.benefits {
+                text-align: left;
+                display: inline-block;
+            }
+            .nav-links { display: none; }
+        }
+        /* Style Accordéon FAQ */
+        .faq-item {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            padding: 0 1.5rem 1.25rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arrière-plan sphères lumineuses écologiques -->
+    <div style="position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;">
+        <div class="glow-sphere" style="top: -10rem; left: -10rem; width: 40rem; height: 40rem; background: rgba(16, 185, 129, 0.2);"></div>
+        <div class="glow-sphere" style="bottom: -10rem; right: -10rem; width: 40rem; height: 40rem; background: rgba(52, 211, 153, 0.15);"></div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="glass-nav">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; padding-bottom: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div style="width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background: rgba(52, 211, 153, 0.15); border: 1px solid var(--border-glass); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">🌿</div>
+                <span style="font-size: 1.15rem; font-weight: 800; color: white;">ÉcoRénov' <span style="color: #34d399;">France</span></span>
+            </div>
+            <!-- Sur mobile, le header reste épuré pour laisser place à l'action -->
+        </div>
+    </header>
+
+    <!-- 🚀 SECTION HERO (LEAD GENERATION IMMÉDIATE) -->
+    <section id="simulation" class="container hero-layout">
+        
+        <!-- Colonne Gauche : Accroche & Bénéfices -->
+        <div class="hero-text">
+            <div class="badge">
+                <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: #34d399; display: inline-block; animation: pulse 2s infinite;"></span>
+                Barème Aides de l'État 2026 Ouvert
+            </div>
+            <h1 style="font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.25rem;">
+                Divisez vos factures par deux grâce au <span class="text-gradient">Solaire & Pompe à Chaleur</span>
+            </h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 35rem;">
+                Calculez vos droits aux subventions (MaPrimeRénov' & CEE) en 30 secondes. Ne laissez pas passer votre enveloppe énergétique cette année.
+            </p>
+            
+            <ul class="benefits">
+                <li>Artisans locaux certifiés RGE</li>
+                <li>Jusqu'à 90% de prise en charge</li>
+                <li>Étude de dossier 100% Gratuite</li>
+            </ul>
+
+            <div style="font-size: 0.85rem; color: #6ee7b7; display: flex; align-items: center; gap: 0.5rem; justify-content: center; margin-top: 1rem; background: rgba(16, 185, 129, 0.1); padding: 0.75rem; border-radius: 0.75rem; border: 1px solid rgba(16, 185, 129, 0.2);">
+                <span>🔒</span> Vos données sont strictement confidentielles.
+            </div>
+        </div>
+
+        <!-- Colonne Droite : LE FORMULAIRE DIRECTEMENT VISIBLE -->
+        <div class="hero-form">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: white;">Vérifiez votre éligibilité ici 👇</h2>
+            </div>
+
+            <!-- Intégration Google Form optimisée en hauteur pour s'intégrer parfaitement -->
+            <div style="background: white; border-radius: 1rem; overflow: hidden; margin-bottom: 1rem;">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf3fnyBet_ISJK5RSExCVfPh1MgU1194SmA0dkQTNajDqCq6g/viewform?embedded=true">Chargement du formulaire...</iframe>
+            </div>
+
+            <!-- BOUTON DE SECOURS (Crucial si iframe bloquée sur tablette/safari strict) -->
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf3fnyBet_ISJK5RSExCVfPh1MgU1194SmA0dkQTNajDqCq6g/viewform" target="_blank" class="btn-conversion" style="font-size: 0.9rem; padding: 0.8rem 1rem;">
+                🔗 Le formulaire ne s'affiche pas ? Cliquez ici
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION SOLUTIONS (Réassurance pour ceux qui ont scrollé) -->
+    <section class="container section-space">
+        <div style="text-align: center; margin-bottom: 3.5rem;">
+            <h2 style="font-size: 2.25rem; font-weight: 800; color: white; margin-bottom: 0.5rem;">Nos Solutions Écologiques</h2>
+            <p style="color: var(--text-muted);">Des équipements performants pour atteindre l'autonomie.</p>
+        </div>
+        
+        <div class="grid-3">
+            <div class="glass-card">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">☀️</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Panneaux Solaires</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Produisez votre propre électricité, consommez-la et revendez le surplus.</p>
+                <!-- Remonte vers le formulaire en haut -->
+                <a href="#simulation" style="color: #34d399; font-weight: 600; text-decoration: none; font-size: 0.9rem;">Faire le test Solaire &rarr;</a>
+            </div>
+
+            <div class="glass-card">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚡</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Pompe à Chaleur (PAC)</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Remplacez votre chaudière et chauffez votre foyer grâce aux calories de l'air.</p>
+                <a href="#simulation" style="color: #34d399; font-weight: 600; text-decoration: none; font-size: 0.9rem;">Faire le test PAC &rarr;</a>
+            </div>
+
+            <div class="glass-card">
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌿</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.75rem;">Le Combo Solaire + PAC</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">L'électricité de vos panneaux alimente votre pompe à chaleur. 100% autonome.</p>
+                <a href="#simulation" style="color: #34d399; font-weight: 600; text-decoration: none; font-size: 0.9rem;">Faire le test Global &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION FAQ INTERACTIVE -->
+    <section class="container section-space" style="max-width: 900px;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2 style="font-size: 2.25rem; font-weight: 800; color: white; margin-bottom: 0.5rem;">Foire Aux Questions</h2>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                <span>Les aides de l'État sont-elles vraiment cumulables ?</span>
+                <span>▼</span>
+            </button>
+            <div class="faq-answer">
+                Oui. MaPrimeRénov' est parfaitement cumulable avec la Prime CEE (fournisseurs d'énergie). L'ensemble peut couvrir jusqu'à 90% du coût des travaux pour les ménages les plus modestes.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                <span>Quelles sont les conditions pour les panneaux solaires ?</span>
+                <span>▼</span>
+            </button>
+            <div class="faq-answer">
+                Pour bénéficier de la prime à l'autoconsommation, votre installation doit être réalisée par un artisan certifié RGE (comme nos partenaires) et installée sur toiture.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                <span>Puis-je coupler des panneaux solaires avec une pompe à chaleur ?</span>
+                <span>▼</span>
+            </button>
+            <div class="faq-answer">
+                Absolument, c'est le combo le plus performant. L'électricité produite par vos panneaux solaires alimente directement votre pompe à chaleur, réduisant drastiquement vos factures d'énergie.
+            </div>
+        </div>
+        
+        <!-- CTA Final ramenant vers le haut -->
+        <div style="text-align: center; margin-top: 3rem;">
+             <a href="#simulation" class="btn-conversion" style="max-width: 400px;">Remonter au Formulaire d'Éligibilité</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="text-align: center; padding: 3rem 1rem; color: #a7f3d0; font-size: 0.75rem; border-top: 1px solid var(--border-glass); background: #011a14;">
+        <p>&copy; 2026 ÉcoRénov' France. Tous droits réservés. Étude de dossier sécurisée.</p>
+    </footer>
+
+    <script>
+        function toggleFaq(button) {
+            const answer = button.nextElementSibling;
+            const isOpen = answer.style.display === "block";
+            
+            document.querySelectorAll('.faq-answer').forEach(item => item.style.display = "none");
+            document.querySelectorAll('.faq-question span:last-child').forEach(span => span.textContent = "▼");
+            
+            if (!isOpen) {
+                answer.style.display = "block";
+                button.querySelector('span:last-child').textContent = "▲";
+            }
+        }
+    </script>
+</body>
+</html>
