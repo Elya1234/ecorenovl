@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉcoRénov' France - Solaire & Pompe à Chaleur 2026/2027</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        
+        /* =========================================
+           VARIABLES : LIGHT MODE (CLAIR)
+           ========================================= */
+        :root {
+            --bg-page: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent: #10b981;
+            --accent-dark: #059669;
+            
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 1);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 40px rgba(16, 185, 129, 0.15);
+            
+            --header-bg: rgba(248, 250, 252, 0.85);
+            --form-bg: white;
+            --footer-bg: #f1f5f9;
+            
+            --bubble-color-1: rgba(16, 185, 129, 0.1);
+            --bubble-color-2: rgba(16, 185, 129, 0.02);
+            
+            --btn-gradient: linear-gradient(135deg, #10b981, #059669);
+            --stars: #f59e0b;
+        }
+
+        /* =========================================
+           VARIABLES : DARK MODE (SOMBRE)
+           ========================================= */
+        body.dark-mode {
+            --bg-page: #020617;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #34d399;
+            --accent-dark: #10b981;
+            
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 20px 40px rgba(52, 211, 153, 0.15);
+            
+            --header-bg: rgba(2, 6, 23, 0.8);
+            --form-bg: rgba(255, 255, 255, 0.02);
+            --footer-bg: #020617;
+            
+            --bubble-color-1: rgba(52, 211, 153, 0.2);
+            --bubble-color-2: rgba(16, 185, 129, 0.05);
+            
+            --btn-gradient: linear-gradient(135deg, #34d399, #10b981);
+        }
+
+        body {
+            background-color: var(--bg-page); color: var(--text-main); line-height: 1.6;
+            overflow-x: hidden; position: relative; transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* --- BOUTONS FLOTTANTS (THEME & WHATSAPP) --- */
+        .floating-container {
+            position: fixed; bottom: 20px; z-index: 1000; display: flex; align-items: flex-end; justify-content: space-between;
+            width: 100%; padding: 0 20px; pointer-events: none;
+        }
+        
+        .theme-switch {
+            pointer-events: auto; background: var(--glass-bg); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px); width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+            cursor: pointer; box-shadow: var(--shadow-soft); transition: all 0.3s ease;
+        }
+        .theme-switch:hover { transform: scale(1.1); box-shadow: var(--shadow-hover); }
+
+        .whatsapp-btn {
+            pointer-events: auto; background: #25D366; color: white; border-radius: 50px;
+            padding: 12px 24px; display: flex; align-items: center; gap: 10px; font-weight: 700;
+            text-decoration: none; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3); transition: all 0.3s ease;
+        }
+        .whatsapp-btn:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 15px 30px rgba(37, 211, 102, 0.4); }
+        .whatsapp-btn svg { width: 24px; height: 24px; fill: currentColor; }
+
+        @media (max-width: 600px) {
+            .whatsapp-btn span { display: none; }
+            .whatsapp-btn { padding: 12px; border-radius: 50%; }
+        }
+
+        /* --- EFFET BULLES --- */
+        .bubbles-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .bubble {
+            position: absolute; bottom: -100px;
+            background: radial-gradient(circle at 30% 30%, var(--bubble-color-1), var(--bubble-color-2));
+            border: 1px solid var(--bubble-color-1); border-radius: 50%;
+            animation: floatUp 15s infinite ease-in-out; box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        .bubble:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-duration: 18s; }
+        .bubble:nth-child(2) { width: 40px; height: 40px; left: 20%; animation-duration: 12s; animation-delay: 2s; }
+        .bubble:nth-child(3) { width: 100px; height: 100px; left: 35%; animation-duration: 22s; animation-delay: 4s; }
+        .bubble:nth-child(4) { width: 60px; height: 60px; left: 60%; animation-duration: 16s; animation-delay: 1s; }
+        .bubble:nth-child(5) { width: 120px; height: 120px; left: 80%; animation-duration: 25s; animation-delay: 5s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            50% { transform: translateY(-50vh) scale(1.1) translateX(20px); }
+            90% { opacity: 1; }
+            100% { transform: translateY(-110vh) scale(1) translateX(-20px); opacity: 0; }
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+        .section-padding { padding: 6rem 0; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- EFFET LIQUID GLASS --- */
+        .glass-panel {
+            background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-radius: 1.5rem; box-shadow: var(--shadow-soft); transition: all 0.4s ease;
+        }
+        .glass-panel:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
+
+        /* --- HEADER & BTN --- */
+        header { background: var(--header-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100; padding: 1rem 0; transition: background 0.5s ease; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo-text { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.35rem; color: var(--text-main); text-decoration: none; }
+        .logo-text .icon { color: var(--accent); font-size: 1.6rem; }
+        
+        .btn-primary {
+            background: var(--btn-gradient); color: #020617; font-weight: 800; padding: 1.1rem 2.2rem;
+            border-radius: 1rem; text-decoration: none; display: inline-block; border: none; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); transition: all 0.3s ease; text-align: center;
+        }
+        body:not(.dark-mode) .btn-primary { color: white; }
+        .btn-primary:hover { transform: scale(1.03) translateY(-2px); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4); }
+
+        .btn-secondary {
+            background: transparent; color: var(--text-main); border: 1px solid var(--glass-border);
+            padding: 0.85rem 1.5rem; border-radius: 1rem; text-decoration: none; display: inline-block;
+            font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); background: rgba(16, 185, 129, 0.05); }
+
+        /* --- HERO --- */
+        .hero { display: flex; gap: 4rem; align-items: center; padding: 4rem 0 2rem 0; min-height: 80vh; }
+        .hero-text { flex: 1; }
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.5rem 1.25rem; border-radius: 50px; color: var(--accent-dark); font-weight: 700; margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        body.dark-mode .hero-tag { color: var(--accent); }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        
+        .hero-text h1 { font-size: clamp(2.3rem, 4vw, 3.8rem); line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -1px; }
+        .hero-features { list-style: none; margin-bottom: 2.5rem; }
+        .hero-features li { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; font-weight: 600; font-size: 1.05rem; }
+        .hero-features li::before { content: "✓"; color: white; background: var(--accent); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
+        
+        /* FORMULAIRE & BADGE CONFIANCE AVANT FORMULAIRE */
+        .hero-form-wrapper { flex: 1; width: 100%; padding: 2rem; border-radius: 2rem; background: var(--form-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-soft); text-align: center; }
+        .trust-badge-form { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.75rem; border-radius: 1rem; text-align: center; margin-bottom: 1.5rem; }
+        .trust-badge-form .stars { color: var(--stars); font-size: 1.2rem; margin-bottom: 0.2rem; }
+        .trust-badge-form p { margin: 0; font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
+        .hero-form-wrapper iframe { width: 100%; height: 500px; border: none; border-radius: 1rem; background: white; margin-bottom: 1rem; }
+        .secure-data { text-align: center; font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+
+        /* --- TRUST BADGES (BANDEAU OFFICIEL SOUS LE HERO) --- */
+        .trust-banner { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; align-items: center; padding: 2rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); background: var(--glass-bg); margin-bottom: 3rem; }
+        .trust-badge { display: flex; flex-direction: column; align-items: center; font-weight: 800; font-size: 1.1rem; color: var(--text-main); }
+        .trust-badge span { font-size: 0.75rem; font-weight: 600; color: var(--accent-dark); text-transform: uppercase; letter-spacing: 1px; }
+        body.dark-mode .trust-badge span { color: var(--accent); }
+
+        /* --- GALERIE ÉPURÉE --- */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+        .gallery-item { border-radius: 1.5rem; overflow: hidden; position: relative; aspect-ratio: 4/3; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-caption { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem 1.5rem 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; font-weight: 700; }
+
+        /* --- AVIS EN SCROLL HORIZONTAL --- */
+        .reviews-container { display: flex; overflow-x: auto; gap: 1.5rem; padding: 1rem 0 2rem 0; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+        .reviews-container::-webkit-scrollbar { display: none; }
+        .review-card { min-width: 340px; scroll-snap-align: start; flex-shrink: 0; padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+        .reviewer-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .reviewer-avatar { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; color: white; background: var(--accent-dark); }
+        .stars { color: var(--stars); font-size: 0.95rem; letter-spacing: 2px; }
+
+        /* --- FAQ --- */
+        .faq-wrapper { max-width: 850px; margin: 3rem auto 0; }
+        .faq-item { margin-bottom: 1rem; border-radius: 1rem; overflow: hidden; background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: var(--shadow-soft); }
+        .faq-question { width: 100%; text-align: left; padding: 1.5rem; background: transparent; border: none; color: var(--text-main); font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question span { color: var(--accent); transition: transform 0.3s ease; }
+        .faq-question.active span { transform: rotate(180deg); }
+        .faq-answer-container { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0, 1, 0, 1); }
+        .faq-answer { padding: 0 1.5rem 1.5rem 1.5rem; color: var(--text-muted); line-height: 1.7; }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; padding: 2rem 0; }
+            .hero-text { text-align: center; }
+            .hero-features { display: inline-block; text-align: left; }
+            .hero-tag { margin: 0 auto 1.5rem auto; display: flex; width: max-content; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOUTONS FLOTTANTS (Switch Thème + WhatsApp) -->
+    <div class="floating-container">
+        <button class="theme-switch" id="theme-toggle" aria-label="Changer de thème">
+            <span id="icon-sun" style="display: none;">☀️</span>
+            <span id="icon-moon">🌙</span>
+        </button>
+
+        <a href="https://wa.me/33600000000" target="_blank" class="whatsapp-btn">
+            <svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.129.332.202.043.073.043.423-.101.827z"/></svg>
+            <span>Posez vos questions</span>
+        </a>
+    </div>
+
+    <!-- BULLES EN FOND -->
+    <div class="bubbles-container">
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo-text"><span class="icon">🌿</span> ÉcoRénov'</a>
+            <a href="#formulaire" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">Étude gratuite</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="container hero" id="formulaire">
+        <div class="hero-text reveal">
+            <div class="hero-tag">Aides de l'État 2026/2027 Ouvertes</div>
+            <h1>Transition <span class="text-accent">Solaire</span> & <span class="text-accent">Pompe à Chaleur</span></h1>
+            <p>Divisez vos factures d'énergie par deux grâce aux équipements de dernière génération. Nos partenaires gèrent l'installation et toutes vos démarches administratives.</p>
+            <ul class="hero-features">
+                <li>Étude technique gratuite à domicile</li>
+                <li>Artisans locaux certifiés RGE</li>
+                <li>Jusqu'à 90% de financement par l'État</li>
+            </ul>
+        </div>
+
+        <div class="hero-form-wrapper reveal" style="transition-delay: 0.2s;">
+            <!-- LE BADGE DE CONFIANCE JUSTE AVANT LE FORMULAIRE -->
+            <div class="trust-badge-form">
+                <div class="stars">★★★★★</div>
+                <p>Excellent : 4,9/5 sur +120 avis clients</p>
+            </div>
+            
+            <!-- FORMULAIRE -->
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf3fnyBet_ISJK5RSExCVfPh1MgU1194SmA0dkQTNajDqCq6g/viewform?embedded=true">Chargement…</iframe>
+            
+            <!-- BOUTON DE SECOURS (SI LE FORMULAIRE BUG) -->
+            <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSf3fnyBet_ISJK5RSExCVfPh1MgU1194SmA0dkQTNajDqCq6g/viewform" target="_blank" class="btn-secondary">
+                    Le formulaire ne s'affiche pas ? Cliquez ici ↗
+                </a>
+            </div>
+
+            <!-- MENTION DE SÉCURITÉ -->
+            <div class="secure-data">
+                <span>🔒</span> Vos données sont sécurisées et strictement confidentielles
+            </div>
+        </div>
+    </section>
+
+    <!-- BANDEAU DE CONFIANCE OFFICIEL (LOGOS / CERTIFICATIONS) -->
+    <div class="trust-banner reveal">
+        <div class="trust-badge">
+            <span style="color: var(--accent);">Certifié</span> RGE QualiPAC
+        </div>
+        <div class="trust-badge">
+            <span>Dispositif 2026/27</span> MaPrimeRénov'
+        </div>
+        <div class="trust-badge">
+            <span>Partenaire</span> Primes CEE
+        </div>
+        <div class="trust-badge">
+            <span>Accompagnement</span> France Rénov'
+        </div>
+    </div>
+
+    <!-- GALERIE ÉPURÉE (IMAGES) -->
+    <section class="container section-padding">
+        <div class="reveal" style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">La perfection dans <span class="text-accent">les détails</span></h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Un aperçu des installations réalisées par nos artisans partenaires certifiés RGE.</p>
+        </div>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item reveal" style="transition-delay: 0.1s;">
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&q=80" alt="Unité extérieure PAC">
+                <div class="gallery-caption">PAC Air/Eau Haute Température</div>
+            </div>
+            <div class="gallery-item reveal" style="transition-delay: 0.2s;">
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356f27?w=600&q=80" alt="Panneaux solaires toit">
+                <div class="gallery-caption">Installation Solaire 3 kWc</div>
+            </div>
+            <div class="gallery-item reveal" style="transition-delay: 0.3s;">
+                <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&q=80" alt="Plomberie propre">
+                <div class="gallery-caption">Finitions Chaufferie Impeccables</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AVIS EN SCROLL HORIZONTAL -->
+    <section class="section-padding" style="background: rgba(16, 185, 129, 0.02); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); overflow: hidden;">
+        <div class="container reveal">
+            <div style="text-align: center; margin-bottom: 2.5rem;">
+                <h2 style="font-size: 2.5rem;">Recommandé par <span class="text-accent">nos clients</span></h2>
+                <p style="color: var(--text-muted);">Faites défiler pour lire leurs expériences.</p>
+            </div>
+            
+            <div class="reviews-container">
+                <!-- AVIS 1 -->
+                <div class="glass-panel review-card">
+                    <div class="reviewer-header">
+                        <div class="reviewer-avatar">E</div>
+                        <div><h4 style="color: var(--text-main);">Elisa DS</h4><div class="stars" style="font-size:0.8rem;">★★★★★</div></div>
+                    </div>
+                    <p class="review-text">"Super professionnel. Étude claire et installation de la PAC très rapide. Le fait qu'ils gèrent les aides est un vrai plus."</p>
+                </div>
+                <!-- AVIS 2 -->
+                <div class="glass-panel review-card">
+                    <div class="reviewer-header">
+                        <div class="reviewer-avatar" style="background:#8b5cf6;">H</div>
+                        <div><h4 style="color: var(--text-main);">Helene L.</h4><div class="stars" style="font-size:0.8rem;">★★★★★</div></div>
+                    </div>
+                    <p class="review-text">"Toutes les aides promises ont été déduites. Les artisans ont laissé le chantier propre. Aucune mauvaise surprise !"</p>
+                </div>
+                <!-- AVIS 3 -->
+                <div class="glass-panel review-card">
+                    <div class="reviewer-header">
+                        <div class="reviewer-avatar" style="background:#3b82f6;">H</div>
+                        <div><h4 style="color: var(--text-main);">Hugo De Sousa</h4><div class="stars" style="font-size:0.8rem;">★★★★★</div></div>
+                    </div>
+                    <p class="review-text">"Je suis très satisfait de ma pompe à chaleur. Elle est très silencieuse. Mon ancienne chaudière fioul faisait un bruit monstre."</p>
+                </div>
+                <!-- AVIS 4 -->
+                <div class="glass-panel review-card">
+                    <div class="reviewer-header">
+                        <div class="reviewer-avatar" style="background:#ec4899;">M</div>
+                        <div><h4 style="color: var(--text-main);">Marc B.</h4><div class="stars" style="font-size:0.8rem;">★★★★★</div></div>
+                    </div>
+                    <p class="review-text">"Installation de panneaux solaires parfaite. J'ai bloqué le tarif d'achat EDF et je vois déjà ma facture d'électricité fondre."</p>
+                </div>
+                <!-- AVIS 5 -->
+                <div class="glass-panel review-card">
+                    <div class="reviewer-header">
+                        <div class="reviewer-avatar" style="background:#f59e0b;">S</div>
+                        <div><h4 style="color: var(--text-main);">Sylvie T.</h4><div class="stars" style="font-size:0.8rem;">★★★★★</div></div>
+                    </div>
+                    <p class="review-text">"J'appréhendais l'administratif. Leur équipe a tout géré pour MaPrimeRénov. Ma PAC chauffe toute la maison sans problème."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ EXPERT (ULTRA COMPLÈTE) -->
+    <section class="container section-padding">
+        <div class="reveal" style="text-align: center;">
+            <h2 style="font-size: 2.5rem;">L'Expertise en <span class="text-accent">Questions</span></h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Tout comprendre sur les pompes à chaleur, les chaudières et les aides.</p>
+        </div>
+        
+        <div class="faq-wrapper">
+            
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Pourquoi remplacer ma chaudière gaz/fioul par une PAC ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        <strong>1. L'économie :</strong> Une PAC génère jusqu'à 4 kWh de chaleur pour 1 kWh d'électricité consommé (division des factures par 3).<br>
+                        <strong>2. L'écologie :</strong> Elle n'émet pas de CO2 localement.<br>
+                        <strong>3. La loi :</strong> L'installation de chaudières fioul neuves est interdite, et le gaz subit des hausses de prix constantes.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Quelle est la différence entre une PAC Air/Air et Air/Eau ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        <strong>La PAC Air/Air</strong> (Climatisation réversible) souffle de l'air chaud ou froid dans la pièce via des modules au mur.<br>
+                        <strong>La PAC Air/Eau</strong> vient remplacer votre chaudière. Elle chauffe de l'eau qui circule dans vos radiateurs existants (fonte, acier) ou votre plancher chauffant. Elle produit aussi l'eau chaude sanitaire de vos douches.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Que se passe-t-il s'il fait très froid dehors (-10°C) ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        Les Pompes à Chaleur modernes que nous installons sont conçues pour fonctionner même à des températures extrêmes (jusqu'à -20°C). De plus, elles sont équipées d'un "appoint électrique" intégré qui prend le relais automatiquement les jours de grand gel pour garantir votre confort à 100%.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Une Pompe à Chaleur est-elle bruyante ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        Non. Les modèles récents ont fait des progrès acoustiques immenses. Le bruit généré par l'unité extérieure est comparable à celui d'un réfrigérateur récent ou du bruissement des feuilles (autour de 35 à 40 décibels). Nos techniciens étudient l'emplacement idéal pour qu'elle ne gêne ni vous, ni vos voisins.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Pourquoi l'État verse-t-il autant d'aides ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        La France a des objectifs stricts de neutralité carbone pour 2050 et souhaite réduire sa dépendance aux énergies fossiles importées (gaz, pétrole). Financer massivement l'installation de Pompes à Chaleur et de panneaux solaires chez les particuliers est le moyen le plus rapide pour l'État d'atteindre ces objectifs.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Faut-il changer tous mes radiateurs pour une PAC Air/Eau ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        Généralement non. Si vous avez d'anciens radiateurs en fonte, nous installons une PAC "Haute Température" capable d'envoyer de l'eau à 65°C, exactement comme votre ancienne chaudière. Vous conservez donc votre installation existante.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item glass-panel reveal">
+                <button class="faq-question">Dois-je avancer le montant des aides publiques (MaPrimeRénov') ? <span>▼</span></button>
+                <div class="faq-answer-container">
+                    <div class="faq-answer">
+                        Non, vous n'avez pas besoin d'avoir des dizaines de milliers d'euros de côté. La prime CEE est souvent déduite directement du devis. Pour financer le "reste à charge", nous vous aidons à monter un dossier d'Éco-Prêt à Taux Zéro (sans aucun intérêt bancaire).
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="container section-padding">
+        <div class="glass-panel reveal" style="text-align: center; padding: 5rem 2rem; border-color: var(--accent);">
+            <h2 style="font-size: 2.8rem; margin-bottom: 1rem; color: var(--text-main);">Passez à l'action <span class="text-accent">aujourd'hui</span></h2>
+            <p style="color: var(--text-muted); font-size: 1.15rem; margin-bottom: 2.5rem;">Rejoignez des centaines de clients qui ont divisé leur facture par deux.</p>
+            <a href="#formulaire" class="btn-primary" style="font-size: 1.2rem; padding: 1.2rem 3rem;">Vérifier mon éligibilité</a>
+        </div>
+    </section>
+
+    <!-- FOOTER LÉGAL -->
+    <footer>
+        <div class="container" style="display: flex; flex-wrap: wrap; gap: 2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 2rem;">
+            <div style="flex: 2; min-width: 250px;">
+                <div class="logo-text" style="color: var(--text-main); margin-bottom: 1rem;"><span class="icon">🌿</span> ÉcoRénov'</div>
+                <p style="color: var(--text-muted); max-width: 300px;">Spécialistes de la transition énergétique. Mise en relation avec des artisans RGE.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <h4 style="color: var(--text-main); margin-bottom: 1rem;">Contact</h4>
+                <p style="color: var(--text-muted);">SIRET : [VOTRE SIRET]</p>
+                <p style="color: var(--text-muted);">Email : contact@ecorenov.fr</p>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <h4 style="color: var(--text-main); margin-bottom: 1rem;">Légal</h4>
+                <a href="#" style="color: var(--text-muted); text-decoration: none; display: block; margin-bottom: 0.5rem;">Mentions Légales</a>
+                <a href="#" style="color: var(--text-muted); text-decoration: none; display: block;">Politique RGPD</a>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.85rem;">
+            &copy; 2026 ÉcoRénov' France. Tous droits réservés.
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. THEME SWITCHER
+        const themeToggle = document.getElementById('theme-toggle');
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if(document.body.classList.contains('dark-mode')) {
+                iconMoon.style.display = 'none';
+                iconSun.style.display = 'block';
+            } else {
+                iconMoon.style.display = 'block';
+                iconSun.style.display = 'none';
+            }
+        });
+
+        // 2. ACCORDÉON FAQ FLUIDE
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answerContainer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.style.maxHeight = null;
+                });
+                if (!isActive) {
+                    question.classList.add('active');
+                    answerContainer.style.maxHeight = answerContainer.scrollHeight + "px";
+                }
+            });
+        });
+
+        // 3. ANIMATIONS AU SCROLL
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+        revealElements.forEach(el => revealOnScroll.observe(el));
+    </script>
+</body>
+</html>
